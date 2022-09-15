@@ -1,6 +1,9 @@
 package com.naveen.stopwatchdemo
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.naveen.stopwatchdemo.databinding.ActivityMainBinding
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity() {
             reset()
         }
         serviceIntent = Intent(applicationContext,StopWatchService::class.java)
+        registerReceiver(updateTime, IntentFilter(StopWatchService.UPDATED_TIME))
     }
 
     private fun startOrStop(){
@@ -46,6 +50,19 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun reset(){
+
+    }
+
+    // Broadcast receiver
+    /*
+      BroadCast receiver are android components which
+      allows us to send or receive events
+     */
+    private val updateTime : BroadcastReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context, intent: Intent) {
+            time = intent.getDoubleExtra(StopWatchService.CURRENT_TIME,0.0)
+            binding.tvTime.text = time.toString()
+        }
 
     }
 }
