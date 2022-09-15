@@ -35,7 +35,7 @@ class StopWatchService : Service() {
         override fun run() {
             val intent = Intent(UPDATED_TIME)
             time++ // increase time by +1
-            intent.putExtra(UPDATED_TIME,time) // save current time to the intent
+            intent.putExtra(CURRENT_TIME,time) // save current time to the intent
             sendBroadcast(intent) // broadcast receiver
         }
 
