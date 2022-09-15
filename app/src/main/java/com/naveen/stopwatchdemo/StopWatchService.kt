@@ -10,8 +10,15 @@ class StopWatchService : Service() {
     // instance of Timer class
     private val timer = Timer()
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return super.onStartCommand(intent, flags, startId)
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        /*
+            we will receive the last time passed from the time activity
+            and send it to the StopWatchTimerTask inner class to increase
+            we want to increase the time by 1sec and return
+         */
+        val time = intent.getDoubleExtra(CURRENT_TIME,0.0)
+        timer.scheduleAtFixedRate(StopWatchTimerTask(time),0,1000)
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
@@ -29,7 +36,7 @@ class StopWatchService : Service() {
             val intent = Intent(UPDATED_TIME)
             time++ // increase time by +1
             intent.putExtra(UPDATED_TIME,time) // save current time to the intent
-            sendBroadcast(intent)
+            sendBroadcast(intent) // broadcast receiver
         }
 
     }
